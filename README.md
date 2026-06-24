@@ -35,7 +35,7 @@ A time-aware meal plan carousel for Home Assistant that integrates with [Mealie]
 | Requirement | Minimum Version | Notes |
 |-------------|----------------|-------|
 | Home Assistant | 2025.1.0 | Required for `template: image:` and Mealie integration |
-| Mealie | v1.9.0+ | Required for OpenAI/AI fallback scraping |
+| Mealie | v1.9.0+ | Required for AI fallback URL scraping |
 
 ## Prerequisites
 
@@ -70,7 +70,7 @@ In Home Assistant go to **Settings → Integrations → Add Integration → Meal
 
 Enter your Mealie URL (e.g. `http://YOUR_MEALIE_IP:9000`) and API token.
 
-To generate an API token in Mealie: **User Settings → API Tokens → Create** (remember to save, you olny see this once).
+To generate an API token in Mealie: **User Settings → API Tokens → Create** (save the token — you only see it once).
 
 ### Step 3 — Enable HA Packages
 
@@ -93,7 +93,7 @@ mealie_api_token: Bearer YOUR_API_TOKEN_HERE
 
 > ⚠️ **Important:** The word `Bearer ` (with a trailing space) MUST be included before the token. Without it the REST sensors will fail to authenticate.
 
-### Step 4b — Create a Text helper for your Mealie URL
+### Step 5 — Create a Text helper for your Mealie URL
 
 Go to **Settings → Devices & Services → Helpers → Create Helper → Text**.
 
@@ -102,15 +102,15 @@ Go to **Settings → Devices & Services → Helpers → Create Helper → Text**
 
 After creating it, click on the helper and set its value to your Mealie URL, e.g. `http://192.168.1.x:9000`.
 
-### Step 4c — Add the package file
+### Step 6 — Add the package file
 
 Copy `packages/mealie_now_serving.yaml` into your `config/packages/` folder. No editing required — the URL and token are pulled from the helper and secrets.yaml automatically.
 
-### Step 5 — Restart Home Assistant
+### Step 7 — Restart Home Assistant
 
 Go to **Settings → System → Restart**.
 
-### Step 6 — Verify sensors
+### Step 8 — Verify sensors
 
 Go to **Developer Tools → States** and confirm the following entities exist and are populated:
 
@@ -120,7 +120,7 @@ Go to **Developer Tools → States** and confirm the following entities exist an
 - `sensor.mealie_meal_slot` (should show `breakfast`, `lunch`, or `supper`)
 - `image.mealie_breakfast_1_image` through `image.mealie_supper_6_image`
 
-### Step 7 — Add the Lovelace card
+### Step 9 — Add the Lovelace card
 
 In your dashboard, add a new card → **Manual** and paste the contents of `lovelace/mealie_now_serving.yaml`.
 
@@ -177,8 +177,8 @@ Mealie entry types map to carousel slots as follows:
 ## Troubleshooting
 
 **Sensors show `unavailable`**
-- Check your API token is correct in the package file
-- Confirm Mealie is reachable at the URL specified
+- Check your API token is correct in `secrets.yaml` and includes the `Bearer ` prefix
+- Confirm Mealie is reachable at the URL set in the `input_text.mealie_url` helper
 - Reload REST entities: Developer Tools → YAML → REST Entities
 
 **Images not showing**
