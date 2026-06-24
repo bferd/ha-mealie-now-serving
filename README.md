@@ -70,7 +70,7 @@ In Home Assistant go to **Settings → Integrations → Add Integration → Meal
 
 Enter your Mealie URL (e.g. `http://YOUR_MEALIE_IP:9000`) and API token.
 
-To generate an API token in Mealie: **User Settings → API Tokens → Create**.
+To generate an API token in Mealie: **User Settings → API Tokens → Create** (remember to save, you olny see this once).
 
 ### Step 3 — Enable HA Packages
 
@@ -92,8 +92,6 @@ mealie_api_token: Bearer YOUR_API_TOKEN_HERE
 ```
 
 > ⚠️ **Important:** The word `Bearer ` (with a trailing space) MUST be included before the token. Without it the REST sensors will fail to authenticate.
-
-To generate an API token in Mealie: **User Settings → API Tokens → Create**.
 
 ### Step 4b — Create a Text helper for your Mealie URL
 
