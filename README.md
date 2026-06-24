@@ -2,7 +2,7 @@
 
 A time-aware meal plan carousel for Home Assistant that integrates with [Mealie](https://mealie.io/). Automatically displays the current meal slot — breakfast, lunch, or supper — as an auto-advancing image slideshow with recipe name overlay.
 
-[![Preview](docs/preview.gif)](docs/preview.mp4)
+[![Preview](docs/preview.gif)](https://youtu.be/MG_jH1pOrZ8)
 
 ## Features
 
