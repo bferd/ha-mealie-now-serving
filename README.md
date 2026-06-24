@@ -2,7 +2,9 @@
 
 A time-aware meal plan carousel for Home Assistant that integrates with [Mealie](https://mealie.io/). Automatically displays the current meal slot — breakfast, lunch, or supper — as an auto-advancing image slideshow with recipe name overlay.
 
-[![Preview](docs/preview.gif)](https://youtu.be/MG_jH1pOrZ8)
+[![Watch the demo](docs/preview.gif)](https://youtu.be/MG_jH1pOrZ8)
+
+> Click the image above to watch the demo video.
 
 ## Features
 
@@ -49,6 +51,18 @@ A time-aware meal plan carousel for Home Assistant that integrates with [Mealie]
 ### Step 1 — Install HACS dependencies
 
 Install both **Simple Swipe Card** and **card-mod** via HACS → Frontend.
+
+### Add this repo as a Custom Repository in HACS (optional)
+
+This repo can be added as a custom repository in HACS so you can track updates:
+
+1. In Home Assistant open HACS
+2. Click the **three dots menu** (top right) → **Custom Repositories**
+3. Paste `bferd/ha-mealie-now-serving` in the Repository field
+4. Set Category to **Template**
+5. Click **Add**
+
+> Note: This repo will not appear in the HACS default store — it must be added as a custom repository. The package file still needs to be manually copied to your `config/packages/` folder as described below.
 
 ### Step 2 — Install the Mealie integration
 
