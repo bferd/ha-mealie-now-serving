@@ -1,0 +1,232 @@
+# ha-mealie-now-serving package
+# https://github.com/bferd/ha-mealie-now-serving
+#
+# SETUP:
+# 1. Add your Mealie API token to secrets.yaml:
+#    mealie_api_token: Bearer YOUR_API_TOKEN_HERE
+#    NOTE: The word "Bearer " (with a space) MUST be included before the token.
+#
+# 2. Create a Text helper in HA:
+#    Settings → Devices & Services → Helpers → Create Helper → Text
+#    Name: Mealie URL
+#    Entity ID: input_text.mealie_url
+#    Set value to your Mealie URL e.g. http://192.168.1.x:9000
+#
+# 3. Drop this file in your config/packages/ folder and restart HA.
+
+rest:
+  - resource_template: "{{ states('input_text.mealie_url') }}/api/households/mealplans/today"
+    method: GET
+    headers:
+      Authorization: !secret mealie_api_token
+    scan_interval: 600
+    sensor:
+      # --- BREAKFAST (up to 4) ---
+      - name: Mealie Breakfast 1
+        unique_id: mealie_breakfast_1
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'breakfast') | list %}
+          {{ meals[0].recipe.name if meals | length > 0 else 'none' }}
+      - name: Mealie Breakfast 1 ID
+        unique_id: mealie_breakfast_1_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'breakfast') | list %}
+          {{ meals[0].recipe.id if meals | length > 0 else 'none' }}
+      - name: Mealie Breakfast 2
+        unique_id: mealie_breakfast_2
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'breakfast') | list %}
+          {{ meals[1].recipe.name if meals | length > 1 else 'none' }}
+      - name: Mealie Breakfast 2 ID
+        unique_id: mealie_breakfast_2_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'breakfast') | list %}
+          {{ meals[1].recipe.id if meals | length > 1 else 'none' }}
+      - name: Mealie Breakfast 3
+        unique_id: mealie_breakfast_3
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'breakfast') | list %}
+          {{ meals[2].recipe.name if meals | length > 2 else 'none' }}
+      - name: Mealie Breakfast 3 ID
+        unique_id: mealie_breakfast_3_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'breakfast') | list %}
+          {{ meals[2].recipe.id if meals | length > 2 else 'none' }}
+      - name: Mealie Breakfast 4
+        unique_id: mealie_breakfast_4
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'breakfast') | list %}
+          {{ meals[3].recipe.name if meals | length > 3 else 'none' }}
+      - name: Mealie Breakfast 4 ID
+        unique_id: mealie_breakfast_4_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'breakfast') | list %}
+          {{ meals[3].recipe.id if meals | length > 3 else 'none' }}
+
+      # --- LUNCH (up to 4) ---
+      - name: Mealie Lunch 1
+        unique_id: mealie_lunch_1
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[0].recipe.name if meals | length > 0 else 'none' }}
+      - name: Mealie Lunch 1 ID
+        unique_id: mealie_lunch_1_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[0].recipe.id if meals | length > 0 else 'none' }}
+      - name: Mealie Lunch 2
+        unique_id: mealie_lunch_2
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[1].recipe.name if meals | length > 1 else 'none' }}
+      - name: Mealie Lunch 2 ID
+        unique_id: mealie_lunch_2_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[1].recipe.id if meals | length > 1 else 'none' }}
+      - name: Mealie Lunch 3
+        unique_id: mealie_lunch_3
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[2].recipe.name if meals | length > 2 else 'none' }}
+      - name: Mealie Lunch 3 ID
+        unique_id: mealie_lunch_3_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[2].recipe.id if meals | length > 2 else 'none' }}
+      - name: Mealie Lunch 4
+        unique_id: mealie_lunch_4
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[3].recipe.name if meals | length > 3 else 'none' }}
+      - name: Mealie Lunch 4 ID
+        unique_id: mealie_lunch_4_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | selectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[3].recipe.id if meals | length > 3 else 'none' }}
+
+      # --- SUPPER (dinner + side + dessert combined, up to 6) ---
+      - name: Mealie Supper 1
+        unique_id: mealie_supper_1
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[0].recipe.name if meals | length > 0 else 'none' }}
+      - name: Mealie Supper 1 ID
+        unique_id: mealie_supper_1_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[0].recipe.id if meals | length > 0 else 'none' }}
+      - name: Mealie Supper 2
+        unique_id: mealie_supper_2
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[1].recipe.name if meals | length > 1 else 'none' }}
+      - name: Mealie Supper 2 ID
+        unique_id: mealie_supper_2_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[1].recipe.id if meals | length > 1 else 'none' }}
+      - name: Mealie Supper 3
+        unique_id: mealie_supper_3
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[2].recipe.name if meals | length > 2 else 'none' }}
+      - name: Mealie Supper 3 ID
+        unique_id: mealie_supper_3_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[2].recipe.id if meals | length > 2 else 'none' }}
+      - name: Mealie Supper 4
+        unique_id: mealie_supper_4
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[3].recipe.name if meals | length > 3 else 'none' }}
+      - name: Mealie Supper 4 ID
+        unique_id: mealie_supper_4_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[3].recipe.id if meals | length > 3 else 'none' }}
+      - name: Mealie Supper 5
+        unique_id: mealie_supper_5
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[4].recipe.name if meals | length > 4 else 'none' }}
+      - name: Mealie Supper 5 ID
+        unique_id: mealie_supper_5_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[4].recipe.id if meals | length > 4 else 'none' }}
+      - name: Mealie Supper 6
+        unique_id: mealie_supper_6
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[5].recipe.name if meals | length > 5 else 'none' }}
+      - name: Mealie Supper 6 ID
+        unique_id: mealie_supper_6_id
+        force_update: true
+        value_template: >
+          {% set meals = value_json | rejectattr('entryType', 'eq', 'breakfast') | rejectattr('entryType', 'eq', 'lunch') | list %}
+          {{ meals[5].recipe.id if meals | length > 5 else 'none' }}
+
+template:
+  - image:
+      - name: "Mealie Breakfast 1 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_breakfast_1_id') }}/images/min-original.webp"
+      - name: "Mealie Breakfast 2 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_breakfast_2_id') }}/images/min-original.webp"
+      - name: "Mealie Breakfast 3 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_breakfast_3_id') }}/images/min-original.webp"
+      - name: "Mealie Breakfast 4 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_breakfast_4_id') }}/images/min-original.webp"
+      - name: "Mealie Lunch 1 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_lunch_1_id') }}/images/min-original.webp"
+      - name: "Mealie Lunch 2 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_lunch_2_id') }}/images/min-original.webp"
+      - name: "Mealie Lunch 3 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_lunch_3_id') }}/images/min-original.webp"
+      - name: "Mealie Lunch 4 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_lunch_4_id') }}/images/min-original.webp"
+      - name: "Mealie Supper 1 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_supper_1_id') }}/images/min-original.webp"
+      - name: "Mealie Supper 2 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_supper_2_id') }}/images/min-original.webp"
+      - name: "Mealie Supper 3 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_supper_3_id') }}/images/min-original.webp"
+      - name: "Mealie Supper 4 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_supper_4_id') }}/images/min-original.webp"
+      - name: "Mealie Supper 5 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_supper_5_id') }}/images/min-original.webp"
+      - name: "Mealie Supper 6 Image"
+        url: "{{ states('input_text.mealie_url') }}/api/media/recipes/{{ states('sensor.mealie_supper_6_id') }}/images/min-original.webp"
+
+  - sensor:
+      - name: "Mealie Meal Slot"
+        unique_id: mealie_meal_slot
+        state: "{{ 'breakfast' if now().hour < 10 else ('lunch' if now().hour < 15 else 'supper') }}"
